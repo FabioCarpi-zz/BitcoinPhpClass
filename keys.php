@@ -25,8 +25,8 @@ class Keys extends Functions{
     $this->B = gmp_init(7);
     $this->P = gmp_init("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F", 16);
     $this->G = array(
-	gmp_init("79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798", 16),
-	gmp_init("483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8", 16)
+      gmp_init("79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798", 16),
+      gmp_init("483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8", 16)
     );
     $this->H = gmp_init(1);
     $this->N = gmp_init("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", 16);
@@ -42,21 +42,21 @@ class Keys extends Functions{
    */
   public function PrivSet($Key){
     if(is_object($Key) == false and ctype_xdigit($Key) == false){
-      return parent::Erro("The private key is not in hexadecimal");
+      return parent::Error("The private key is not in hexadecimal");
     }elseif(is_object($Key) == false and strlen($Key) > 64){
-      return parent::Erro("The private key is greater than 32 bytes");
+      return parent::Error("The private key is greater than 32 bytes");
     }
     if(is_object($Key) == false){
       $key_dec = gmp_init($Key, 16);
     }elseif(get_class($Key) == "GMP"){
       $key_dec = $Key;
     }else{
-      return parent::Erro("The private key is not a GMP object");
+      return parent::Error("The private key is not a GMP object");
     }
     if($key_dec <= $this->H){
-      return parent::Erro("The private key is below the minimum limit of the curve");
+      return parent::Error("The private key is below the minimum limit of the curve");
     }elseif($key_dec >= $this->N){
-      return parent::Erro("The private key is above the upper limit of the curve");
+      return parent::Error("The private key is above the upper limit of the curve");
     }
     $this->Priv = $key_dec;
     return true;
@@ -69,7 +69,7 @@ class Keys extends Functions{
    */
   public function PrivGet($InGmp = false){
     if(is_object($this->Priv) == false){
-      return parent::Erro("Was not created a private key");
+      return parent::Error("Was not created a private key");
     }elseif($InGmp){
       return $this->Priv;
     }else{
@@ -93,7 +93,7 @@ class Keys extends Functions{
     $check = substr($check, 0, 8);
     //Check the checksum
     if($sum != $check){
-      return parent::Erro("Invalid checksum");
+      return parent::Error("Invalid checksum");
     }
     //Remove identifiers
     $key_hex = substr($key_hex, 2);
@@ -154,7 +154,7 @@ class Keys extends Functions{
    */
   public function PubGet($FullPub = false){
     if(is_null($this->PubX)){
-      return parent::Erro("Was not created a public key");
+      return parent::Error("Was not created a public key");
     }
     if($FullPub == true){
       return "04" . $this->PubX . $this->PubY;
@@ -174,13 +174,13 @@ class Keys extends Functions{
    */
   public function PubSet($Key){
     if(is_object($Key) == false and ctype_xdigit($Key) == false){
-      return parent::Erro("The public key is in hexadecimal");
+      return parent::Error("The public key is in hexadecimal");
     }
     if(ctype_xdigit($Key)){
       if(substr($Key, 0, 2) != "02" and substr($Key, 0, 2) != "03" and substr($Key, 0, 2) != "04"){
-	return parent::Erro("The public key does not have an acceptable identifier");
+	return parent::Error("The public key does not have an acceptable identifier");
       }elseif(strlen($Key) != 66 and strlen($Key) != 130){
-	return parent::Erro("The public key does not have a acceptable size");
+	return parent::Error("The public key does not have a acceptable size");
       }
     }
     if(strlen($Key) == 66){
@@ -215,7 +215,7 @@ class Keys extends Functions{
    */
   public function Hash160Get(){
     if(ctype_xdigit($this->Hash160) == false){
-      return parent::Erro("Was not created a Hash160");
+      return parent::Error("Was not created a Hash160");
     }
     return $this->Hash160;
   }
@@ -227,7 +227,7 @@ class Keys extends Functions{
    */
   public function Hash160Set($Hash){
     if(ctype_xdigit($Hash) == false){
-      return parent::Erro("The hash160 is not in hexadecimal");
+      return parent::Error("The hash160 is not in hexadecimal");
     }
     $this->Priv = null;
     $this->PubX = null;
@@ -255,7 +255,7 @@ class Keys extends Functions{
    */
   public function AddressGet(){
     if(is_null($this->Address)){
-      return parent::Erro("Was not created an address");
+      return parent::Error("Was not created an address");
     }
     return $this->Address;
   }
@@ -267,9 +267,9 @@ class Keys extends Functions{
    */
   public function AddressSet($Adr){
     if(is_null($Adr) or empty($Adr)){
-      return parent::Erro("Not been set an address");
+      return parent::Error("Not been set an address");
     }elseif(substr($Adr, 0, 1) != 1){
-      return parent::Erro("The address does not have an acceptable identifier");
+      return parent::Error("The address does not have an acceptable identifier");
     }
     $adr = parent::base58_decode($Adr);
     $sum = substr($adr, -8);
@@ -277,7 +277,7 @@ class Keys extends Functions{
     $check = parent::Hash256("00" . $adr);
     $check = substr($check, 0, 8);
     if($check != $sum){
-      return parent::Erro("The checksum of the address is invalid");
+      return parent::Error("The checksum of the address is invalid");
     }
     $this->Address = $Adr;
     return true;
@@ -289,7 +289,7 @@ class Keys extends Functions{
    */
   public function Address2Hash(){
     if(is_null($this->Address)){
-      return parent::Erro("Not been set an address");
+      return parent::Error("Not been set an address");
     }
     $hash = parent::base58_decode($this->Address);
     return $this->Hash160 = substr($hash, 0, -8);
