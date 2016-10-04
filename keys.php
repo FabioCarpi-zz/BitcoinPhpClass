@@ -4,7 +4,6 @@
  * 
  * Elliptic curve maths
  * https://github.com/wobine/blackboard101
- * 
  * Decompress pubkey
  * https://bitcointalk.org/index.php?topic=644919.0
  */
@@ -275,7 +274,7 @@ class Keys extends Functions{
     $adr = parent::base58_decode($Adr);
     $sum = substr($adr, -8);
     $adr = substr($adr, 0, -8);
-    $check = parent::Hash256("00".$adr);
+    $check = parent::Hash256("00" . $adr);
     $check = substr($check, 0, 8);
     if($check != $sum){
       return parent::Erro("The checksum of the address is invalid");
@@ -295,7 +294,7 @@ class Keys extends Functions{
     $hash = parent::base58_decode($this->Address);
     return $this->Hash160 = substr($hash, 0, -8);
   }
-  
+
   /**
    * 
    * @param string $Hash
@@ -317,7 +316,7 @@ class Keys extends Functions{
       return $return;
     }
   }
-  
+
   /**
    * 
    * @param string $Hash
@@ -328,16 +327,16 @@ class Keys extends Functions{
     $Hash = gmp_init($Hash, 16);
     $r = gmp_init($Sign["r"], 16);
     $s = gmp_init($Sign["s"], 16);
-    self::Priv2Pub();
+    self::PubGet();
     $pub = array(gmp_init($this->PubX, 16), gmp_init($this->PubY, 16));
-    
+
     $w = self::EccInv($s, $this->N);
     $u1 = self::EccMultiply($this->G, ($Hash * $w) % $this->N);
     $u2 = self::EccMultiply($pub, ($r * $w) % $this->N);
     list($x, $y) = self::EccAdd($u1, $u2);
     return $r == $x;
   }
-  
+
   /**
    * 
    * @param array $Sign
@@ -350,7 +349,7 @@ class Keys extends Functions{
     $return .= "02";
     $return .= dechex(strlen($Sign["s"]) / 2);
     $return .= $Sign["s"];
-    return "30".dechex(strlen($return) / 2).$return;
+    return "30" . dechex(strlen($return) / 2) . $return;
   }
 
 //-------------------------------------------------------------------------------
