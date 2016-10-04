@@ -3,7 +3,7 @@ require_once("transactions.php");
 
 class Block extends Functions{
   private $Block = array();
-  
+
   /**
    * 
    * @param int $Versao
@@ -42,7 +42,7 @@ class Block extends Functions{
       return parent::Erro("Was not passed an object of Transaction class");
     }
   }
-  
+
   /**
    * 
    * @param int $Nonce
@@ -50,11 +50,11 @@ class Block extends Functions{
    */
   public function NonceSet($Nonce){
     $hash = parent::Hash256(
-      reset(unpack("H*", pack("V*", $this->Block["version"]))).
-      parent::SwapOrder($this->Block["prevhash"]).
-      parent::SwapOrder($this->Block["MerkleRoot"]).
-      reset(unpack("H*", pack("V*", $this->Block["time"]))).
-      parent::SwapOrder($this->Block["bits"]).
+      reset(unpack("H*", pack("V*", $this->Block["version"]))) .
+      parent::SwapOrder($this->Block["prevhash"]) .
+      parent::SwapOrder($this->Block["MerkleRoot"]) .
+      reset(unpack("H*", pack("V*", $this->Block["time"]))) .
+      parent::SwapOrder($this->Block["bits"]) .
       reset(unpack("H*", pack("V*", $Nonce)))
     );
     if(gmp_init(parent::SwapOrder($hash), 16) <= gmp_init($this->Block["target"], 16)){
@@ -81,11 +81,11 @@ class Block extends Functions{
     }
     return $return;
   }
-  
+
   /**
    * Prints on the screen the formatted block data in Json format
    */
   public function Show(){
-    echo "<pre>".json_encode($this->Block, JSON_PRETTY_PRINT)."</pre>";
+    echo "<pre>" . json_encode($this->Block, JSON_PRETTY_PRINT) . "</pre>";
   }
 }

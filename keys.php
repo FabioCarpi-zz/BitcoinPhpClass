@@ -25,8 +25,8 @@ class Keys extends Functions{
     $this->B = gmp_init(7);
     $this->P = gmp_init("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F", 16);
     $this->G = array(
-      gmp_init("79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798", 16),
-      gmp_init("483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8", 16)
+	gmp_init("79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798", 16),
+	gmp_init("483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8", 16)
     );
     $this->H = gmp_init(1);
     $this->N = gmp_init("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", 16);
@@ -83,19 +83,19 @@ class Keys extends Functions{
    * @return boolean Returns <b>true</b> if no errors happen
    */
   public function WifSet($Key){
-    //Descodifica
+    //Decodes
     $key_hex = parent::base58_decode($Key);
-    //Tira o checksum
+    //Removes the checksum
     $sum = substr($key_hex, -8);
     $key_hex = substr($key_hex, 0, -8);
-    //Cria o checksum
+    //Creates the checksum
     $check = parent::Hash256($key_hex);
     $check = substr($check, 0, 8);
-    //Checa o checksum
+    //Check the checksum
     if($sum != $check){
       return parent::Erro("Invalid checksum");
     }
-    //Tira os identificadores
+    //Remove identifiers
     $key_hex = substr($key_hex, 2);
     if(strlen($key_hex) == 66){
       $key_hex = substr($key_hex, 0, -2);
@@ -329,7 +329,6 @@ class Keys extends Functions{
     $s = gmp_init($Sign["s"], 16);
     self::PubGet();
     $pub = array(gmp_init($this->PubX, 16), gmp_init($this->PubY, 16));
-
     $w = self::EccInv($s, $this->N);
     $u1 = self::EccMultiply($this->G, ($Hash * $w) % $this->N);
     $u2 = self::EccMultiply($pub, ($r * $w) % $this->N);

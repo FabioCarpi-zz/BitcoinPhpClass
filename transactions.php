@@ -4,7 +4,7 @@ require_once("script.php");
 
 class Transaction extends Functions{
   private $TX = array(), $Raw;
-  
+
   /**
    * 
    * @param int $Version
@@ -35,7 +35,7 @@ class Transaction extends Functions{
     $pointer["scriptSig"]["asm"] = $sc->Hex2Asm($pointer["scriptSig"]["hex"]);
     $pointer["sequence"] = $Sequence;
   }
-  
+
   /**
    * 
    * @param int $Amount
@@ -51,12 +51,12 @@ class Transaction extends Functions{
     $sc = new Script();
     if(is_null($CustomScript)){
       if(substr($Address, 0, 1) == 1){
-        $key->AddressSet($Address);
-        $pointer["scriptPubKey"]["hex"] = "76a914".$key->Address2Hash()."88ac";
-        $pointer["scriptPubKey"]["asm"] = $sc->Hex2Asm($pointer["scriptPubKey"]["hex"]);
-        $pointer["scriptPubKey"]["reqSigs"] = 1;
-        $pointer["scriptPubKey"]["type"] = "pubkeyhash";
-        $pointer["scriptPubKey"]["addresses"][] = $Address;
+	$key->AddressSet($Address);
+	$pointer["scriptPubKey"]["hex"] = "76a914" . $key->Address2Hash() . "88ac";
+	$pointer["scriptPubKey"]["asm"] = $sc->Hex2Asm($pointer["scriptPubKey"]["hex"]);
+	$pointer["scriptPubKey"]["reqSigs"] = 1;
+	$pointer["scriptPubKey"]["type"] = "pubkeyhash";
+	$pointer["scriptPubKey"]["addresses"][] = $Address;
       }
     }else{
       $pointer["scriptPubKey"]["hex"] = $CustomScript;
@@ -66,7 +66,7 @@ class Transaction extends Functions{
       $pointer["scriptPubKey"]["addresses"][] = null;
     }
   }
-  
+
   /**
    * 
    * @return string
@@ -77,7 +77,7 @@ class Transaction extends Functions{
     }
     return $this->Raw;
   }
-  
+
   /**
    * Returns the hash of the transaction
    * @return string
@@ -88,7 +88,7 @@ class Transaction extends Functions{
     }
     return $this->TX["hash"];
   }
-  
+
   /**
    * Returns the transaction size in bytes
    * @return int
@@ -104,9 +104,9 @@ class Transaction extends Functions{
    * Prints on the screen the formatted transaction data in Json format
    */
   public function Show(){
-    echo "<pre>".json_encode($this->TX, JSON_PRETTY_PRINT)."</pre>";
+    echo "<pre>" . json_encode($this->TX, JSON_PRETTY_PRINT) . "</pre>";
   }
-  
+
   private function RawBuild(){
     $return = reset(unpack("H*", pack("V*", $this->TX["version"])));
     $return .= reset(unpack("H*", pack("C*", count($this->TX["vin"]))));

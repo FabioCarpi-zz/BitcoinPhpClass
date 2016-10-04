@@ -58,7 +58,7 @@ class Functions{
     $return = self::gmp_tohex($return);
     return $return;
   }
-  
+
   /**
    * 
    * @param array $Array
@@ -66,17 +66,17 @@ class Functions{
    */
   protected function Merkle($Array){
     $len = count($Array);
-    if($len == 1) {
+    if($len == 1){
       return $Array;
-    }elseif($len % 2 == 1) {
+    }elseif($len % 2 == 1){
       $Array[] = $Array[$len - 1];
     }
-    for($i = 0; $i < count($Array)-1; ){
-      $Array[] = self::Hash256(self::SwapOrder($Array[$i++]).self::SwapOrder($Array[$i++]));
+    for($i = 0; $i < count($Array) - 1;){
+      $Array[] = self::Hash256(self::SwapOrder($Array[$i++]) . self::SwapOrder($Array[$i++]));
     }
     return $Array;
   }
-  
+
   /**
    * 
    * @param string $in
@@ -114,7 +114,7 @@ class Functions{
     }
     return false;
   }
-  
+
   /**
    * 
    * @param object $n
@@ -129,7 +129,7 @@ class Functions{
     }
     return $n;
   }
-  
+
   /**
    * 
    * @param string $n
