@@ -1,5 +1,4 @@
 <?php
-
 class Functions{
   private $Debug;
   const DebugDie = 1, DebugTraceComplete = 2, DebugTraceResumed = 4;
@@ -84,6 +83,19 @@ class Functions{
    */
   protected function SwapOrder($in){
     return implode("", array_reverse(str_split($in, 2)));
+  }
+
+  protected function VarInt($i){
+    if($i < 0xfd){
+      return reset(unpack("H*", pack("C*", $i)));
+    }elseif($i <= 0xffff){
+      return "fd" . reset(unpack("H*", pack("v*", $i)));
+    }elseif($i <= 0xffffffff){
+      return "fe" . reset(unpack("H*", pack("V*", $i)));
+      ;
+    }else{
+      return false;
+    }
   }
 
   /**
