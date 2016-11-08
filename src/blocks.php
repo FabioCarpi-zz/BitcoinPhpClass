@@ -1,4 +1,5 @@
 <?php
+// Version 1 from 2016-11-04
 require_once("transactions.php");
 
 class Block extends Functions{
@@ -6,9 +7,10 @@ class Block extends Functions{
 
   /**
    * 
-   * @param int $Versao
    * @param string $PrevHash
-   * @param string $Bits
+   * @param int $Bits
+   * @param int $Version
+   * @param int $Time
    */
   public function __construct($PrevHash, $Bits, $Version = 4, $Time = null){
     parent::__construct();

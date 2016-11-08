@@ -1,4 +1,5 @@
 <?php
+// Version 1 from 2016-11-04
 require_once("functions.php");
 
 class Script extends Functions{
@@ -30,14 +31,14 @@ class Script extends Functions{
       $byte = substr($Hex, 0, 2);
       $Hex = substr($Hex, 2);
       if($byte >= 0x01 and $byte <= 0x4b){
-	$return .= substr($Hex, 0, hexdec($byte) * 2) . " ";
-	$Hex = substr($Hex, hexdec($byte) * 2);
+        $return .= substr($Hex, 0, hexdec($byte) * 2) . " ";
+        $Hex = substr($Hex, hexdec($byte) * 2);
       }else{
-	if(isset($list[$byte])){
-	  $return .= $list[$byte] . " ";
-	}else{
-	  $return .= "NA ";
-	}
+        if(isset($list[$byte])){
+          $return .= $list[$byte] . " ";
+        }else{
+          $return .= "NA ";
+        }
       }
     }
     return $return;

@@ -1,8 +1,11 @@
 <?php
+// Version 1 from 2016-11-04
 /*
  * Credits
  * 
  * Elliptic curve maths
+ * https://youtu.be/iB3HcPgm_FI
+ * https://youtu.be/U2bw_N6kQL8
  * https://github.com/wobine/blackboard101
  * Decompress pubkey
  * https://bitcointalk.org/index.php?topic=644919.0

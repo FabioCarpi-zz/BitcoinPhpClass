@@ -1,4 +1,5 @@
 <?php
+// Version 1 from 2016-11-04
 require_once("keys.php");
 require_once("script.php");
 
@@ -51,12 +52,12 @@ class Transaction extends Functions{
     $sc = new Script();
     if(is_null($CustomScript)){
       if(substr($Address, 0, 1) == 1){
-	$key->AddressSet($Address);
-	$pointer["scriptPubKey"]["hex"] = "76a914" . $key->Address2Hash() . "88ac";
-	$pointer["scriptPubKey"]["asm"] = $sc->Hex2Asm($pointer["scriptPubKey"]["hex"]);
-	$pointer["scriptPubKey"]["reqSigs"] = 1;
-	$pointer["scriptPubKey"]["type"] = "pubkeyhash";
-	$pointer["scriptPubKey"]["addresses"][] = $Address;
+        $key->AddressSet($Address);
+        $pointer["scriptPubKey"]["hex"] = "76a914" . $key->Address2Hash() . "88ac";
+        $pointer["scriptPubKey"]["asm"] = $sc->Hex2Asm($pointer["scriptPubKey"]["hex"]);
+        $pointer["scriptPubKey"]["reqSigs"] = 1;
+        $pointer["scriptPubKey"]["type"] = "pubkeyhash";
+        $pointer["scriptPubKey"]["addresses"][] = $Address;
       }
     }else{
       $pointer["scriptPubKey"]["hex"] = $CustomScript;

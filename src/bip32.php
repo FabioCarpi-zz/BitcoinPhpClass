@@ -1,4 +1,5 @@
 <?php
+// Version 1 from 2016-11-04
 require_once("keys.php");
 
 class Bip32 extends Keys implements Int_Bip32{
