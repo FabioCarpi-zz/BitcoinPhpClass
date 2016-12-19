@@ -1,5 +1,5 @@
 <?php
-// Version 1 from 2016-12-18
+// Version 1 from 2016-12-19
 require_once("keys.php");
 require_once("script.php");
 
@@ -19,7 +19,7 @@ class Transaction extends Functions{
    * @param int $LockTime
    */
   public function LockSet($LockTime){
-    if(strlen($LockTime) <= 8){
+    if(ctype_xdigit($LockTime)){
       $this->TX["locktime"] = $LockTime;
     }
   }
@@ -100,6 +100,7 @@ class Transaction extends Functions{
     if(!ctype_digit($Amount)){
       return false;
     }
+
     $this->Raw = null;
     $pointer = &$this->TX["vout"][];
     $pointer["value"] = $Amount;
@@ -193,10 +194,10 @@ class Transaction extends Functions{
     if(count($this->TX["vin"]) > 0){
       foreach($this->TX["vin"] as $pt){
         $return .= parent::SwapOrder($pt["txid"]);
-        $return .= reset(unpack("H*", pack("h*", $pt["vout"])));
+        $return .= str_pad($pt["vout"], 8, 0, STR_PAD_LEFT);
         $return .= reset(unpack("H*", pack("C*", strlen($pt["scriptSig"]["hex"]) / 2)));
         $return .= $pt["scriptSig"]["hex"];
-        $return .= reset(unpack("H*", pack("h*", $pt["sequence"])));
+        $return .= str_pad($pt["sequence"], 8, 0, STR_PAD_LEFT);
       }
     }
     $return .= reset(unpack("H*", pack("C*", count($this->TX["vout"]))));
@@ -207,7 +208,7 @@ class Transaction extends Functions{
         $return .= $pt["scriptPubKey"]["hex"];
       }
     }
-    $return .= reset(unpack("H*", pack("V*", $this->Lock)));
+    $return .= str_pad($this->TX["locktime"], 8, 0, STR_PAD_LEFT);
     $this->Raw = $return;
     $this->TX["size"] = strlen($return) / 2;
     $this->TX["hash"] = parent::SwapOrder(parent::Hash256($return));

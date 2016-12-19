@@ -1,5 +1,5 @@
 <?php
-// Version 1 from 2016-11-04
+// Version 1 from 2016-12-19
 class Functions{
   private $Debug;
   const DebugDie = 1, DebugTraceComplete = 2, DebugTraceResumed = 4;
@@ -82,7 +82,7 @@ class Functions{
    * @param string $in
    * @return string
    */
-  protected function SwapOrder($in){
+  public static function SwapOrder($in){
     return implode("", array_reverse(str_split($in, 2)));
   }
 
