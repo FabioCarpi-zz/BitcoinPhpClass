@@ -1,5 +1,5 @@
 <?php
-// Version 1 from 2016-12-19
+// Version 1 from 2016-12-20
 require_once("keys.php");
 require_once("script.php");
 
@@ -17,10 +17,16 @@ class Transaction extends Functions{
   /**
    * 
    * @param int $LockTime
+   * @return boolean
    */
   public function LockSet($LockTime){
-    if(ctype_xdigit($LockTime)){
+    if(ctype_xdigit($LockTime) and $LockTime <= 0xffffffff){
       $this->TX["locktime"] = $LockTime;
+      $this->TX["hash"] = null;
+      $this->Raw = null;
+      return true;
+    }else{
+      return false;
     }
   }
 
@@ -29,7 +35,7 @@ class Transaction extends Functions{
    * @return int
    */
   public function LockGet(){
-    return $this->TX["locktime"];
+    return strtoupper($this->TX["locktime"]);
   }
 
   /**
@@ -38,6 +44,7 @@ class Transaction extends Functions{
    * @param int $Vout
    * @param string $Script
    * @param int $Sequence
+   * @return boolean
    */
   public function InputAdd($PrevOut, $Vout, $Script = null, $Sequence = 0xffffffff){
     if(empty($Script)){
@@ -54,6 +61,9 @@ class Transaction extends Functions{
     $pointer["scriptSig"]["hex"] = $Script;
     $pointer["scriptSig"]["asm"] = $sc->Hex2Asm($pointer["scriptSig"]["hex"]);
     $pointer["sequence"] = $Sequence;
+    $this->TX["hash"] = null;
+    $this->Raw = null;
+    return true;
   }
 
   /**
@@ -71,10 +81,10 @@ class Transaction extends Functions{
    */
   public function InputGet($Index){
     return array(
-      "txid" => $this->TX["vin"][$Index]["txid"],
-      "vout" => $this->TX["vin"][$Index]["vout"],
-      "scriptsig" => $this->TX["vin"][$Index]["scriptSig"]["hex"],
-      "sequence" => $this->TX["vin"][$Index]["sequence"]
+      "txid" => strtoupper($this->TX["vin"][$Index]["txid"]),
+      "vout" => strtoupper($this->TX["vin"][$Index]["vout"]),
+      "scriptsig" => strtoupper($this->TX["vin"][$Index]["scriptSig"]["hex"]),
+      "sequence" => strtoupper($this->TX["vin"][$Index]["sequence"])
     );
   }
 
@@ -83,6 +93,7 @@ class Transaction extends Functions{
    * @param int $Amount
    * @param string $Address
    * @param string $CustomScript
+   * @return boolean
    */
   public function OutputAdd($Amount, $Address = null, $CustomScript = null){
     if(empty($Address)){
@@ -100,7 +111,6 @@ class Transaction extends Functions{
     if(!ctype_digit($Amount)){
       return false;
     }
-
     $this->Raw = null;
     $pointer = &$this->TX["vout"][];
     $pointer["value"] = $Amount;
@@ -123,6 +133,9 @@ class Transaction extends Functions{
       $pointer["scriptPubKey"]["type"] = null;
       $pointer["scriptPubKey"]["addresses"][] = null;
     }
+    $this->TX["hash"] = null;
+    $this->Raw = null;
+    return true;
   }
 
   /**
@@ -140,10 +153,10 @@ class Transaction extends Functions{
    */
   public function OutputGet($Index){
     return array(
-      "address" => $this->TX["vout"][$Index]["scriptPubKey"]["addresses"][0],
-      "value" => $this->TX["vout"][$Index]["value"],
-      "scriptPubKeyhex" => $this->TX["vout"][$Index]["scriptPubKey"]["hex"],
-      "scriptPubKeyasm" => $this->TX["vout"][$Index]["scriptPubKey"]["asm"]
+      "address" => strtoupper($this->TX["vout"][$Index]["scriptPubKey"]["addresses"][0]),
+      "value" => strtoupper($this->TX["vout"][$Index]["value"]),
+      "scriptPubKeyhex" => strtoupper($this->TX["vout"][$Index]["scriptPubKey"]["hex"]),
+      "scriptPubKeyasm" => strtoupper($this->TX["vout"][$Index]["scriptPubKey"]["asm"])
     );
   }
 
@@ -156,7 +169,7 @@ class Transaction extends Functions{
     if(is_null($this->Raw)){
       self::RawBuild();
     }
-    return $this->Raw;
+    return strtoupper($this->Raw);
   }
 
   /**
@@ -167,7 +180,7 @@ class Transaction extends Functions{
     if(is_null($this->Raw)){
       self::RawBuild();
     }
-    return $this->TX["hash"];
+    return strtoupper($this->TX["hash"]);
   }
 
   /**
@@ -185,7 +198,7 @@ class Transaction extends Functions{
    * Prints on the screen the formatted transaction data in Json format
    */
   public function Show(){
-    echo "<pre>" . json_encode($this->TX, JSON_PRETTY_PRINT) . "</pre>";
+    echo "<pre>".json_encode($this->TX, JSON_PRETTY_PRINT)."</pre>";
   }
 
   private function RawBuild(){
@@ -208,7 +221,10 @@ class Transaction extends Functions{
         $return .= $pt["scriptPubKey"]["hex"];
       }
     }
-    $return .= str_pad($this->TX["locktime"], 8, 0, STR_PAD_LEFT);
+    $temp = $this->TX["locktime"];
+    $temp = str_pad($temp, 8, 0, STR_PAD_LEFT);
+    $temp = parent::SwapOrder($temp);
+    $return .= $temp;
     $this->Raw = $return;
     $this->TX["size"] = strlen($return) / 2;
     $this->TX["hash"] = parent::SwapOrder(parent::Hash256($return));
