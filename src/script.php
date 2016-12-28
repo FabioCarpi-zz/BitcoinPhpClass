@@ -1,5 +1,5 @@
 <?php
-// Version 1 from 2016-12-22
+// Version 1 from 2016-12-23
 require_once("functions.php");
 
 class Script extends Functions{
@@ -55,12 +55,29 @@ class Script extends Functions{
 	public function Type($Hex){
 		if(preg_match("/76A914.*88AC/", $Hex)){
 			return "pubkeyhash";
-		}elseif(preg_match("/A914.*AC/", $Hex)){
+		}elseif(preg_match("/A914.*87/", $Hex)){
 			return "scripthash";
 		}elseif(preg_match("/21.*AC/", $Hex)){
 			return "pubkey";
 		}else{
 			return "nonstandard";
+		}
+	}
+
+	/**
+	 *
+	 * @param string $Script
+	 * @return string
+	 */
+	public function GetHash($Script){
+		if(self::Type($Script) == "pubkeyhash"){
+			return substr($Script, 6, -4);
+		}elseif(self::Type($Script) == "scripthash"){
+			return substr($Script, 4, -2);
+		}elseif(self::Type($Script) == "pubkey"){
+			return substr($Script, 2, -2);
+		}else{
+			return false;
 		}
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// Version 1 from 2016-12-23
+// Version 2 from 2016-12-23
 /*
  * Credits
  * 
@@ -133,6 +133,11 @@ class Keys extends Functions{
 		$this->PubX = parent::gmp_tohex($pub[0]);
 		$this->PubY = parent::gmp_tohex($pub[1]);
 		return self::PubGet($FullPub);
+	}
+
+	public function Priv2Hash($FullPub = false){
+		self::Priv2Address($FullPub);
+		return self::Hash160Get();
 	}
 
 	/**
