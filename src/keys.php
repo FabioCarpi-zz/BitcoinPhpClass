@@ -1,5 +1,7 @@
 <?php
-// Version 2 from 2016-12-23
+//Version 2 from 2017-01-02
+//require_once("functions.php");
+
 /*
  * Credits
  * 
@@ -10,8 +12,6 @@
  * Decompress pubkey
  * https://bitcointalk.org/index.php?topic=644919.0
  */
-
-require_once("functions.php");
 
 class Keys extends Functions{
 	protected $P, $A, $B, $G, $N, $H;

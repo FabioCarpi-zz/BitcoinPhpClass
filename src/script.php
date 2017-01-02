@@ -1,6 +1,6 @@
 <?php
-// Version 1 from 2016-12-23
-require_once("functions.php");
+//Version 1 from 2017-01-02
+//require_once("functions.php");
 
 class Script extends Functions{
 	private $List = array(

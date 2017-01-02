@@ -1,6 +1,6 @@
 <?php
-// Version 1 from 2016-11-04
-require_once("transactions.php");
+//Version 1 from 2017-01-02
+//require_once("transactions.php");
 
 class Block extends Functions{
   private $Block = array();

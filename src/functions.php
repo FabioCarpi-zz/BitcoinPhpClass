@@ -1,5 +1,5 @@
 <?php
-// Version 1 from 2016-12-22
+//Version 1 from 2016-12-22
 class Functions{
 	private $Debug;
 	const DebugDie = 1, DebugTraceComplete = 2, DebugTraceResumed = 4;

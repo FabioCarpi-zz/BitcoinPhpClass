@@ -1,7 +1,7 @@
 <?php
-// Version 1 from 2016-12-23
-require_once("keys.php");
-require_once("script.php");
+//Version 1 from 2017-01-02
+//require_once("keys.php");
+//require_once("script.php");
 
 class Transaction extends Functions{
 	private $TX = array(), $Raw;

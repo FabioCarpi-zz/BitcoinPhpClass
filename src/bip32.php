@@ -1,6 +1,6 @@
 <?php
-// Version 1 from 2016-11-04
-require_once("keys.php");
+//Version 1 from 2017-01-02
+//require_once("keys.php");
 
 class Bip32 extends Keys implements Int_Bip32{
   const Mainnet_Private = "0488ade4", Mainnet_Public = "0488b21e";
